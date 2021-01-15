@@ -1,0 +1,90 @@
+---
+title: "Exploratory Data Analysis"
+author: "YOUR NAME"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:  
+    keep_md: true
+    toc: true
+    toc_float: true
+    fig_height: 6
+    fig_width: 12
+    fig_align: 'center'
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+```
+
+## Reading Notes
+
+- A variable is categorical if it can only take one of a small set of values. 
+
+- A variable is continuous if it can take any of an infinite set of ordered values.
+
+- Typical values are easy to interpret and visualize; Unusual values are outliers and easy to identify in a graph. 
+
+- The mutate() and ifelse() functions can be used to replace unusual or missing values (as NA) without having to delete the entire row.
+
+- Covariation is the tendancy for the values of two or more variables to vary together in a related way. 
+
+- Density is the count standardised so that the area under each frequency polygon is one. 
+
+- A boxplot is a type of visual shorthand for a distribution of values. 
+
+- Various geometric functions can be used to clean up the data (geom_count, geom_tile, geom_point, geom_histogram, etc). 
+
+## EDA Example
+
+The code below is an example of the EDA process using the `starwars` data from the `tidyverse` package. (Make sure you have the `tidyverse` package installed!)
+
+Run the code line-by-line and look at the output. Add a comment to each line of code that explains what it does/what insights it provides.
+
+```{r}
+library(tidyverse) #Imports tidyverse 
+
+dim(starwars) #Dim function sets the dimension of the specific matrix 
+colnames(starwars) #Creates separate columns for each of the variables
+
+head(starwars) #Displays  the first n rows present in input data
+glimpse(starwars) #Similar to a print statement but displays data running down a page
+
+?starwars #Gives an explanation regarding the starwars data set
+
+starwars %>% count(species) #Counts the number of species in the starwars data set 
+
+mean(starwars$height) #Calculates the average height of starwars characters in the data set
+mean(starwars$height, na.rm = TRUE) #Calculates the average height of starwars characters in the data set, but excludes values with NA from the calculation.
+
+summary(starwars$height) #Five-number-summary of the character heights in the data set
+
+cm_to_ft <- function(cm){
+  ft = cm / 30.48
+  return(ft)
+} #Converts the centimeters to feet for future calculations
+
+starwars_2 <- starwars %>% mutate(height_ft = cm_to_ft(height)) #Creates copy of original data set for calculation of character height using feet instead of centimeters
+
+dim(starwars_2) #Sets dimention of matrix of new data set
+colnames(starwars_2) # Creates separate columns for each of the variables in the new data set
+
+summary(starwars_2$height_ft) #Five-number-summary of the new starwars data set
+
+ggplot(starwars_2, aes(height_ft)) + 
+  geom_histogram() #Creates a ggplot using the heights in feet with the number of occurances 
+
+starwars_2 %>% filter(height_ft == max(height_ft)) #Realigns the data with all respective variables
+starwars_2 %>% filter(height_ft == max(height_ft, na.rm = TRUE)) #Displays the character Yarael Poof and it's respective variable information 
+
+# https://starwars.fandom.com/wiki/Yarael_Poof
+```
+
+## EDA Practice
+
+Continue exploring the `starwars` data to gain additional insights, using [R4DS: Chapter 7](https://r4ds.had.co.nz/exploratory-data-analysis.html) as a guide.
+
+It is ok if you don't understand the all code in Chapter 7. (That is what we'll be learning the next two weeks!) If writing your own code is a struggle, try the "copy, paste, and tweak" method.
+
+```{r}
+# your code goes here
+```
